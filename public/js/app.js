@@ -57796,6 +57796,11 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
         },
         setselecteduser: function setselecteduser(state, selecteduser) {
             state.selecteduser = selecteduser;
+            state.contacts.forEach(function (obj) {
+                if (obj.id == selecteduser.id) {
+                    obj.unread_count = 0;
+                }
+            });
         },
         setconversation: function setconversation(state, selecteduser) {
             var conv = state.conversations.filter(function (conversation) {
@@ -57812,6 +57817,18 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             } else if (message.from == state.selecteduser.id) {
                 state.conversation.push(message);
             }
+
+            state.contacts.forEach(function (obj) {
+                if (obj.id == message.from) {
+                    if (state.selecteduser) {
+                        if (state.selecteduser.id != message.from) {
+                            obj.unread_count += 1;
+                        }
+                    } else {
+                        obj.unread_count += 1;
+                    }
+                }
+            });
         },
         settypinguser: function settypinguser(state, usertype) {
             var tuser = state.contacts.find(function (u) {
@@ -57847,6 +57864,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
                     context.commit('updateconversation', response.data);
                 });
             }
+        },
+        unreadmessages: function unreadmessages(context, contact) {
+            __WEBPACK_IMPORTED_MODULE_2_axios___default.a.post('/contact/' + contact.id + '/unread').then(function (response) {});
         }
     }
 });
@@ -59390,7 +59410,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\nli {\n    cursor: pointer;\n}\n", ""]);
+exports.push([module.i, "\nli {\n    cursor: pointer;\n}\nspan.badge-danger {\n    font-size: medium !important;\n}\n", ""]);
 
 // exports
 
@@ -59420,6 +59440,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['contact'],
     computed: {
+        unread: function unread() {
+            return this.contact.unread_count;
+        },
         first_name: function first_name() {
             var name = this.contact.name;
             return name.split(' ')[0];
@@ -59467,6 +59490,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         setAsSelected: function setAsSelected() {
             this.$store.commit('setselecteduser', this.contact);
             this.$store.commit('setconversation', this.contact);
+            this.$store.dispatch('unreadmessages', this.contact);
         }
     }
 });
@@ -59496,9 +59520,11 @@ var render = function() {
         _c("div", { staticClass: "user_info" }, [
           _c("span", [_vm._v(" " + _vm._s(_vm.name) + " ")]),
           _vm._v(" "),
-          _c("span", { staticClass: "badge badge-danger" }, [
-            _vm._v(" " + _vm._s(_vm.contact.unread_count) + " ")
-          ]),
+          _vm.unread > 0
+            ? _c("span", { staticClass: "badge badge-danger" }, [
+                _vm._v(" " + _vm._s(_vm.unread) + " ")
+              ])
+            : _vm._e(),
           _vm._v(" "),
           _vm.isTyping
             ? _c("p", [_vm._v(" " + _vm._s(_vm.first_name) + " is typing...")])

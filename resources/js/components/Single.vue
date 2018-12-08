@@ -6,7 +6,7 @@
                 <span :class="[!isOnline ? 'offline' : '', 'online_icon']"></span>
             </div>
             <div class="user_info">
-                <span> {{ name }} </span> <span class="badge badge-danger"> {{ contact.unread_count }} </span>
+                <span> {{ name }} </span> <span v-if="unread > 0" class="badge badge-danger"> {{ unread }} </span>
                 <p v-if="isTyping"> {{ first_name }} is typing...</p>
             </div>
         </div>
@@ -17,6 +17,9 @@
 export default {
     props: ['contact'],
     computed: {
+        unread() {
+            return this.contact.unread_count;
+        },
         first_name() {
             let name = this.contact.name;
             return name.split(' ')[0];
@@ -60,6 +63,7 @@ export default {
         setAsSelected() {
             this.$store.commit('setselecteduser', this.contact);
             this.$store.commit('setconversation', this.contact);
+            this.$store.dispatch('unreadmessages', this.contact);
         }
     }
 }
@@ -68,5 +72,8 @@ export default {
 <style>
     li {
         cursor: pointer;
+    }
+    span.badge-danger {
+        font-size: medium !important;
     }
 </style>

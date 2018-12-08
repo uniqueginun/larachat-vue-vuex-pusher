@@ -77,6 +77,11 @@ export const store = new Vuex.Store({
         },
         setselecteduser(state, selecteduser) {
             state.selecteduser = selecteduser;
+            state.contacts.forEach(function(obj) {
+                if (obj.id == selecteduser.id) {
+                    obj.unread_count = 0;
+                }
+            });
         },
         setconversation(state, selecteduser) {
             let conv = state.conversations.filter(conversation => {
@@ -94,6 +99,19 @@ export const store = new Vuex.Store({
             else if(message.from == state.selecteduser.id) {
                 state.conversation.push(message)
             } 
+
+            state.contacts.forEach(function(obj) {
+                if (obj.id == message.from) {
+                    if(state.selecteduser) {
+                        if(state.selecteduser.id != message.from) {
+                            obj.unread_count += 1;
+                        }
+                    } else {
+                        obj.unread_count += 1;
+                    }
+                }
+            });
+
         },
         settypinguser(state, usertype) { 
             let tuser = state.contacts.find(u => {
@@ -129,6 +147,11 @@ export const store = new Vuex.Store({
                     context.commit('updateconversation', response.data);
                 });
             }
+        },
+        unreadmessages(context, contact) {
+            Axios.post(`/contact/${contact.id}/unread`).then(response => {
+                
+            });
         }
     }
 });

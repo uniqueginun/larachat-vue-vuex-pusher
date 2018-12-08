@@ -22,3 +22,4 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/contacts', 'UserController@index');
 
 Route::post('/message/new', 'MessageController@store');
+Route::post('/contact/{user}/unread', 'MessageController@update');

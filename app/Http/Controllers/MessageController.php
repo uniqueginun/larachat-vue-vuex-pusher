@@ -74,9 +74,10 @@ class MessageController extends Controller
      * @param  \App\Message  $message
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Message $message)
+    public function update($contact)
     {
-        //
+        Message::where('from', $contact)->where('to', auth()->id())->update(['read' => true]);
+        return 'updated';
     }
 
     /**
