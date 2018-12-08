@@ -23,3 +23,7 @@ Route::get('/contacts', 'UserController@index');
 
 Route::post('/message/new', 'MessageController@store');
 Route::post('/contact/{user}/unread', 'MessageController@update');
+
+Route::get('/profile', 'UserController@profile');
+
+Route::post('/profile', 'UserController@fileUpload')->name('profile');

@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'profile'
     ];
 
     protected $appends = ['unread_count'];
@@ -33,5 +33,11 @@ class User extends Authenticatable
 
     public function getUnreadCountAttribute() {
         return Message::where('to', auth()->id())->where('from', $this->id)->where('read', false)->count();;
+    }
+
+
+    public function getProfileAttribute()
+    {
+        return "/images/{$this->attributes['profile']}";
     }
 }
