@@ -59866,7 +59866,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -59902,6 +59902,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     computed: {
         selecteduser: function selecteduser() {
             return this.$store.getters.selecteduser;
+        },
+        pholder: function pholder() {
+            return "Say somthing to " + this.$store.getters.selecteduser.name;
         }
     },
     methods: {
@@ -59956,7 +59959,7 @@ var render = function() {
     _c("div", { staticClass: "input-group" }, [
       _vm._m(0),
       _vm._v(" "),
-      _c("textarea", {
+      _c("input", {
         directives: [
           {
             name: "model",
@@ -59966,7 +59969,7 @@ var render = function() {
           }
         ],
         staticClass: "form-control type_msg",
-        attrs: { placeholder: "Type your message..." },
+        attrs: { type: "text", placeholder: _vm.pholder },
         domProps: { value: _vm.text },
         on: {
           blur: _vm.stopped,

@@ -4,7 +4,7 @@
             <div class="input-group-append">
                 <span class="input-group-text attach_btn"></span>
             </div>
-            <input type="text" class="form-control type_msg" v-model="text" @blur="stopped" @keydown.enter="send" placeholder="say somthing to {{selectedUser.name}}"/>
+            <input type="text" class="form-control type_msg" v-model="text" @blur="stopped" @keydown.enter="send" :placeholder="pholder"/>
             <div class="input-group-append">
                 <span class="input-group-text send_btn"><i @click="send" class="fas fa-location-arrow"></i></span>
             </div>
@@ -22,6 +22,9 @@ export default {
     computed: {
         selecteduser() {
             return this.$store.getters.selecteduser;
+        },
+        pholder() {
+            return "Say somthing to " + this.$store.getters.selecteduser.name;
         }
     },
     methods: {
